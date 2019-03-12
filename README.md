@@ -5,9 +5,22 @@ The Docker stack configuration for [randomwinpicker.jonas-thelemann.de](https://
 This project is deployed in accordance to the [DargStack template](https://github.com/Dargmuesli/dargstack-template/) to make deployment a breeze. It is closely related to [randomwinpicker's source code](https://github.com/dargmuesli/randomwinpicker/).
 
 ## Table of Contents
-1. **[Services](#services)**
 1. **[Secrets](#secrets)**
+1. **[Services](#services)**
 1. **[Volumes](#volumes)**
+
+<a name="secrets"></a>
+
+## Secrets
+
+- `postgres_db`:
+  The database's name.
+
+- `postgres_password`:
+  The database's password.
+
+- `postgres_user`:
+  The database's default name.
 
 <a name="services"></a>
 
@@ -44,19 +57,6 @@ This project is deployed in accordance to the [DargStack template](https://githu
 - #### `www`
 
   You can access the main project at [randomwinpicker.test](https://randomwinpicker.test/).
-
-<a name="secrets"></a>
-
-## Secrets
-
-- `postgres_db`:
-  The database's name.
-
-- `postgres_password`:
-  The database's password.
-
-- `postgres_user`:
-  The database's default name.
 
 <a name="volumes"></a>
 
