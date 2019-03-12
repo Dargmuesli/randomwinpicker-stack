@@ -1,0 +1,51 @@
+services:
+  adminer:
+    deploy:
+      labels:
+      - (( append ))
+      - traefik.frontend.auth.basic=${STACK_AUTH_BASIC}
+  certdumper:
+    image: alpine:latest
+    command: >
+      ash -c " \
+        apk --no-cache add inotify-tools jq openssl util-linux bash && \
+        cd /etc/traefik/acme/ && \
+        wget https://raw.githubusercontent.com/containous/traefik/master/contrib/scripts/dumpcerts.sh -O ./dumpcerts.sh && \
+        chmod 744 dumpcerts.sh && \
+        while true; do \
+          bash dumpcerts.sh acme.json ./ && \
+          ln -f ./certs/* ./ && \
+          ln -f ./private/* ./ && \
+          inotifywait -e modify ./acme.json
+        done"
+    volumes:
+    - acme-data:/etc/traefik/acme
+  traefik:
+    command:
+    - (( prepend ))
+    - --acme.acmeLogging=true
+    - --acme.dnsChallenge.provider=${STACK_ACME_PROVIDER}
+    - --acme.domains=${STACK_DOMAIN},adminer.${STACK_DOMAIN},traefik.${STACK_DOMAIN},www.${STACK_DOMAIN}
+    - --acme.email=${STACK_ACME_EMAIL}
+    - --acme.entrypoint=https
+    - --acme.storage=/etc/traefik/acme/acme.json
+    deploy:
+      labels:
+      - (( append ))
+      - "traefik.frontend.auth.basic=${STACK_AUTH_BASIC}"
+    env_file: "./secrets/traefik.env"
+    volumes:
+    - (( replace ))
+    - /var/run/docker.sock:/var/run/docker.sock
+    - acme-data:/etc/traefik/acme
+  www:
+    deploy:
+      labels:
+      - (( append ))
+      - "traefik.auth.frontend.auth.basic=${STACK_AUTH_BASIC}"
+    volumes:
+    - (( replace ))
+    - ./secrets/randomwinpicker.env:/var/www/${STACK_DOMAIN}/credentials/randomwinpicker.env:ro
+    - acme-data:/etc/ssl/certificates
+volumes:
+  acme-data: {}

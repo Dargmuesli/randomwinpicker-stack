@@ -1,0 +1,80 @@
+secrets:
+  postgres_db:
+    file: ./secrets/postgres_db.secret
+  postgres_password:
+    file: ./secrets/postgres_password.secret
+  postgres_user:
+    file: ./secrets/postgres_user.secret
+services:
+  adminer:
+    deploy:
+      labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:adminer.${STACK_DOMAIN}
+      - traefik.port=8080
+    image: adminer:4
+    volumes:
+    - ../production/data/adminer/adminer.css:/var/www/html/adminer.css:ro
+  postgres:
+    environment:
+      POSTGRES_DB_FILE: /run/secrets/postgres_db
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+    image: postgres:11-alpine
+    secrets:
+    - postgres_db
+    - postgres_password
+    - postgres_user
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+  traefik:
+    command:
+    - --api
+    - --defaultentrypoints=http,https
+    - --docker
+    - --docker.exposedByDefault=false
+    - --docker.swarmMode=true
+    - --entryPoints=Name:http Address::80 Redirect.EntryPoint:https
+    - --entryPoints=Name:https Address::443 TLS:/etc/ssl/certificates/randomwinpicker.crt,/etc/ssl/certificates/randomwinpicker.key
+      Compress:true
+    - --insecureSkipVerify=true
+    deploy:
+      labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:traefik.${STACK_DOMAIN}
+      - traefik.port=8080
+      mode: global
+      placement:
+        constraints:
+        - node.role == manager
+    image: traefik:1.7-alpine
+    ports:
+    - mode: host
+      protocol: tcp
+      published: 80
+      target: 80
+    - mode: host
+      protocol: tcp
+      published: 443
+      target: 443
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./certificates:/etc/ssl/certificates
+  www:
+    deploy:
+      labels:
+      - traefik.enable=true
+      - traefik.port=443
+      - traefik.protocol=https
+      - traefik.default.frontend.priority=1
+      - traefik.default.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN}
+      - traefik.auth.frontend.priority=2
+      - traefik.auth.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN};PathPrefix:/tools/
+    image: dargmuesli/randomwinpicker:3.0.0
+    volumes:
+    - ../../randomwinpicker/dist/randomwinpicker:/var/www/randomwinpicker
+    - ../production/secrets/randomwinpicker.env:/var/www/randomwinpicker/credentials/randomwinpicker.env:ro
+    - ./certificates:/etc/ssl/certificates:ro
+version: "3.6"
+volumes:
+  postgres-data: {}
