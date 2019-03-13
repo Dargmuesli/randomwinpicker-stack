@@ -9,8 +9,6 @@ This project is deployed in accordance to the [DargStack template](https://githu
 1. **[Services](#services)**
 1. **[Volumes](#volumes)**
 
-<a name="secrets"></a>
-
 ## Secrets
 
 - `postgres_db`:
@@ -21,8 +19,6 @@ This project is deployed in accordance to the [DargStack template](https://githu
 
 - `postgres_user`:
   The database's default name.
-
-<a name="services"></a>
 
 ## Services
 
@@ -57,8 +53,6 @@ This project is deployed in accordance to the [DargStack template](https://githu
 - #### `www`
 
   You can access the main project at [randomwinpicker.test](https://randomwinpicker.test/).
-
-<a name="volumes"></a>
 
 ## Volumes
 
