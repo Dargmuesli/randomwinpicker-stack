@@ -19,7 +19,7 @@ services:
           inotifywait -e modify ./acme.json
         done"
     volumes:
-    - acme-data:/etc/traefik/acme
+    - acme-data:/etc/traefik/acme/
   traefik:
     command:
     - (( prepend ))
@@ -37,7 +37,7 @@ services:
     volumes:
     - (( replace ))
     - /var/run/docker.sock:/var/run/docker.sock
-    - acme-data:/etc/traefik/acme
+    - acme-data:/etc/traefik/acme/
   www:
     deploy:
       labels:
@@ -46,6 +46,6 @@ services:
     volumes:
     - (( replace ))
     - ./secrets/randomwinpicker.env:/var/www/${STACK_DOMAIN}/credentials/randomwinpicker.env:ro
-    - acme-data:/etc/ssl/certificates
+    - acme-data:/etc/ssl/certificates/
 volumes:
   acme-data: {}
