@@ -70,7 +70,7 @@ services:
       - traefik.default.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN}
       - traefik.auth.frontend.priority=2
       - traefik.auth.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN};PathPrefix:/tools/
-    image: dargmuesli/randomwinpicker:3.0.0
+    image: dargmuesli/randomwinpicker:4.0.1
     volumes:
     - ../../randomwinpicker/dist/randomwinpicker/:/var/www/randomwinpicker/
     - ../production/secrets/randomwinpicker.env:/var/www/randomwinpicker/credentials/randomwinpicker.env:ro

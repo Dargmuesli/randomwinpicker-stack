@@ -14,8 +14,8 @@ services:
         chmod 744 dumpcerts.sh && \
         while true; do \
           bash dumpcerts.sh acme.json ./ && \
-          ln -f ./certs/* ./ && \
-          ln -f ./private/* ./ && \
+          ln -f ./certs/${STACK_DOMAIN}.crt ./${STACK_DOMAIN%.*}.crt && \
+          ln -f ./private/${STACK_DOMAIN}.key ./${STACK_DOMAIN%.*}.key && \
           inotifywait -e modify ./acme.json
         done"
     volumes:
