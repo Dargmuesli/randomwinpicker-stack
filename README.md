@@ -12,13 +12,13 @@ This project is deployed in accordance to the [DargStack template](https://githu
 ## Secrets
 
 - `postgres_db`:
-  The database's name.
+  the database's name.
 
 - `postgres_password`:
-  The database's password.
+  the database's password.
 
 - `postgres_user`:
-  The database's default name.
+  the database's default name.
 
 ## Services
 
@@ -57,4 +57,4 @@ This project is deployed in accordance to the [DargStack template](https://githu
 ## Volumes
 
 - `postgres-data`:
-  The database's data.
+  the database's data.
