@@ -18,6 +18,8 @@ services:
           ln -f ./private/${STACK_DOMAIN}.key ./${STACK_DOMAIN%.*}.key && \
           inotifywait -e modify ./acme.json
         done"
+    environment:
+      STACK_DOMAIN: ${STACK_DOMAIN}
     volumes:
     - acme-data:/etc/traefik/acme/
   traefik:
