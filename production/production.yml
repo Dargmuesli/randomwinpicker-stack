@@ -4,11 +4,6 @@ secrets:
   traefik_cf-api-key:
     external: true
 services:
-  adminer:
-    deploy:
-      labels:
-      - (( append ))
-      - traefik.frontend.auth.basic=${STACK_AUTH_BASIC}
   certdumper:
     image: alpine:latest
     command: >
@@ -36,10 +31,6 @@ services:
     - --acme.email=${STACK_ACME_EMAIL}
     - --acme.entrypoint=https
     - --acme.storage=/etc/traefik/acme/acme.json
-    deploy:
-      labels:
-      - (( append ))
-      - "traefik.frontend.auth.basic=${STACK_AUTH_BASIC}"
     environment:
       # For other providers see:
       # https://docs.traefik.io/configuration/acme/#provider
@@ -53,10 +44,6 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     - acme-data:/etc/traefik/acme/
   www:
-    deploy:
-      labels:
-      - (( append ))
-      - "traefik.auth.frontend.auth.basic=${STACK_AUTH_BASIC}"
     volumes:
     - (( replace ))
     - ./secrets/randomwinpicker.env:/var/www/${STACK_DOMAIN}/credentials/randomwinpicker.env:ro
