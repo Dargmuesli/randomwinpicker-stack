@@ -73,7 +73,9 @@ services:
       - traefik.auth.frontend.auth.basic=${STACK_AUTH_BASIC}
       - traefik.auth.frontend.priority=2
       - traefik.auth.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN};PathPrefix:/tools/
-    image: dargmuesli/randomwinpicker:4.0.1
+    environment:
+      APACHE_RUN_USER: "#1000"
+    image: dargmuesli/randomwinpicker:dev
     volumes:
     - ../../randomwinpicker/dist/randomwinpicker/:/var/www/randomwinpicker/
     - ../production/secrets/randomwinpicker.env:/var/www/randomwinpicker/credentials/randomwinpicker.env:ro
