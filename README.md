@@ -37,10 +37,6 @@ This project is deployed in accordance to the [DargStack template](https://githu
 
   Values in square brackets are [Docker secrets](https://docs.docker.com/engine/swarm/secrets/).
 
-- #### `certdumper` ![production](https://img.shields.io/badge/-production-informational.svg?style=flat-square)
-
-  See [DargStack template: certificates](https://github.com/Dargmuesli/dargstack-template/#certificates).
-
 - #### `postgres`
 
   You can access the database via `adminer`.
@@ -53,6 +49,10 @@ This project is deployed in accordance to the [DargStack template](https://githu
 
   You can access the reverse proxy's dashboard at [traefik.randomwinpicker.test](https://traefik.randomwinpicker.test/).
   Traefik enables HTTPS for all services and acts as a load-balancer too.
+
+- ### `traefik_certs-dumper` ![production](https://img.shields.io/badge/-production-informational.svg?style=flat-square)
+
+  See [DargStack template: certificates](https://github.com/Dargmuesli/dargstack-template/#certificates).
 
 ## Volumes
 
