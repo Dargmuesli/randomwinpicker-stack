@@ -4,24 +4,6 @@ secrets:
   traefik_cf-api-key:
     external: true
 services:
-  certdumper:
-    image: alpine:latest
-    command: >
-      ash -c " \
-        apk --no-cache add inotify-tools jq openssl util-linux bash && \
-        cd /etc/traefik/acme/ && \
-        wget https://raw.githubusercontent.com/containous/traefik/master/contrib/scripts/dumpcerts.sh -O ./dumpcerts.sh && \
-        chmod 744 dumpcerts.sh && \
-        while true; do \
-          bash dumpcerts.sh acme.json ./ && \
-          ln -f ./certs/${STACK_DOMAIN}.crt ./${STACK_DOMAIN%.*}.crt && \
-          ln -f ./private/${STACK_DOMAIN}.key ./${STACK_DOMAIN%.*}.key && \
-          inotifywait -e modify ./acme.json
-        done"
-    environment:
-      STACK_DOMAIN: ${STACK_DOMAIN}
-    volumes:
-    - acme-data:/etc/traefik/acme/
   traefik:
     command:
     - (( prepend ))
@@ -43,6 +25,22 @@ services:
     - (( replace ))
     - /var/run/docker.sock:/var/run/docker.sock
     - acme-data:/etc/traefik/acme/
+  traefik_certs-dumper:
+    image: ldez/traefik-certs-dumper:v2.4.0
+    command:
+    - file
+    - --clean=false
+    - --crt-name="$STACK_DOMAIN"
+    - --dest=/etc/traefik/acme/
+    - --key-name="$STACK_DOMAIN"
+    - --post-hook="/mnt/traefik_certs-dumper_post-hook $STACK_DOMAIN"
+    - --source=/etc/traefik/acme/acme.json
+    - --watch
+    environment:
+      STACK_DOMAIN: ${STACK_DOMAIN}
+    volumes:
+    - acme_data:/etc/traefik/acme/
+    - ./configurations/traefik_certs-dumper_post-hook:/mnt/traefik_certs-dumper_post-hook
   www:
     volumes:
     - (( replace ))
