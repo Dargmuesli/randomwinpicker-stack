@@ -45,14 +45,14 @@ This project is deployed in accordance to the [DargStack template](https://githu
 
   You can access the database via `adminer`.
 
+- #### `randomwinpicker`
+
+  You can access the main project at [randomwinpicker.test](https://randomwinpicker.test/).
+
 - #### `traefik`
 
   You can access the reverse proxy's dashboard at [traefik.randomwinpicker.test](https://traefik.randomwinpicker.test/).
   Traefik enables HTTPS for all services and acts as a load-balancer too.
-
-- #### `www`
-
-  You can access the main project at [randomwinpicker.test](https://randomwinpicker.test/).
 
 ## Volumes
 

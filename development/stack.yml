@@ -28,6 +28,24 @@ services:
     - postgres_user
     volumes:
     - postgres-data:/var/lib/postgresql/data/
+  randomwinpicker:
+    deploy:
+      labels:
+      - traefik.enable=true
+      - traefik.port=443
+      - traefik.protocol=https
+      - traefik.default.frontend.priority=1
+      - traefik.default.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN}
+      - traefik.auth.frontend.auth.basic=${STACK_AUTH_BASIC}
+      - traefik.auth.frontend.priority=2
+      - traefik.auth.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN};PathPrefix:/tools/
+    environment:
+      APACHE_RUN_USER: "#1000"
+    image: dargmuesli/randomwinpicker:dev
+    volumes:
+    - ../../randomwinpicker/dist/randomwinpicker/:/var/www/randomwinpicker/
+    - ../production/secrets/randomwinpicker.env:/var/www/randomwinpicker/credentials/randomwinpicker.env:ro
+    - ./certificates/:/etc/ssl/certificates/:ro
   traefik:
     command:
     - --api
@@ -62,24 +80,6 @@ services:
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - ./certificates/:/etc/traefik/acme/
-  www:
-    deploy:
-      labels:
-      - traefik.enable=true
-      - traefik.port=443
-      - traefik.protocol=https
-      - traefik.default.frontend.priority=1
-      - traefik.default.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN}
-      - traefik.auth.frontend.auth.basic=${STACK_AUTH_BASIC}
-      - traefik.auth.frontend.priority=2
-      - traefik.auth.frontend.rule=Host:${STACK_DOMAIN},www.${STACK_DOMAIN};PathPrefix:/tools/
-    environment:
-      APACHE_RUN_USER: "#1000"
-    image: dargmuesli/randomwinpicker:dev
-    volumes:
-    - ../../randomwinpicker/dist/randomwinpicker/:/var/www/randomwinpicker/
-    - ../production/secrets/randomwinpicker.env:/var/www/randomwinpicker/credentials/randomwinpicker.env:ro
-    - ./certificates/:/etc/ssl/certificates/:ro
 version: "3.6"
 volumes:
   postgres-data: {}

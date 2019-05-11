@@ -4,6 +4,11 @@ secrets:
   traefik_cf-api-key:
     external: true
 services:
+  randomwinpicker:
+    volumes:
+    - (( replace ))
+    - ./secrets/randomwinpicker.env:/var/www/${STACK_DOMAIN}/credentials/randomwinpicker.env:ro
+    - acme-data:/etc/ssl/certificates/
   traefik:
     command:
     - (( prepend ))
@@ -41,10 +46,5 @@ services:
     volumes:
     - acme_data:/etc/traefik/acme/
     - ./configurations/traefik_certs-dumper/post-hook:/mnt/traefik_certs-dumper_post-hook
-  www:
-    volumes:
-    - (( replace ))
-    - ./secrets/randomwinpicker.env:/var/www/${STACK_DOMAIN}/credentials/randomwinpicker.env:ro
-    - acme-data:/etc/ssl/certificates/
 volumes:
   acme-data: {}
