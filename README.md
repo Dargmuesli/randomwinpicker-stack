@@ -2,7 +2,7 @@
 
 The Docker stack configuration for [randomwinpicker.jonas-thelemann.de](https://randomwinpicker.jonas-thelemann.de/).
 
-This project is deployed in accordance to the [DargStack template](https://github.com/Dargmuesli/dargstack-template/) to make deployment a breeze. It is closely related to [randomwinpicker's source code](https://github.com/dargmuesli/randomwinpicker/).
+This project is deployed in accordance to the [DargStack template](https://github.com/dargmuesli/dargstack_template/) to make deployment a breeze. It is closely related to [randomwinpicker's source code](https://github.com/dargmuesli/randomwinpicker/).
 
 ## Table of Contents
 1. **[Secrets](#secrets)**
@@ -52,7 +52,7 @@ This project is deployed in accordance to the [DargStack template](https://githu
 
 - ### `traefik_certs-dumper` ![production](https://img.shields.io/badge/-production-informational.svg?style=flat-square)
 
-  See [DargStack template: certificates](https://github.com/Dargmuesli/dargstack-template/#certificates).
+  See [DargStack template: certificates](https://github.com/Dargmuesli/dargstack_template/#certificates).
 
 ## Volumes
 
